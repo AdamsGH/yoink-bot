@@ -1,0 +1,257 @@
+# English locale
+# Format: use {variable} for runtime substitution
+
+common:
+  credits: "<blockquote><i>Managed by</i> {managed_by}\n{credits_bots}</blockquote>"
+  error_unknown: "Something went wrong. Please try again."
+  access_denied: "Access denied."
+  flood_wait: "Too many requests. Please wait {seconds}s."
+  processing: "Processing..."
+  done: "Done."
+  cancel: "Cancel"
+  close: "Close"
+  back: "Back"
+  yes: "Yes"
+  no: "No"
+  on: "ON"
+  off: "OFF"
+  enabled: "Enabled ✅"
+  disabled: "Disabled ❌"
+  saved: "Saved ✅"
+
+start:
+  welcome: |
+    👋 <b>Welcome to Yoink Bot!</b>
+
+    Send me any video/audio/image link and I'll download it for you.
+
+    Use /help to see all commands.
+  subscribe_required: |
+    <i>To use this bot you need to subscribe to {channel} Telegram channel.</i>
+    After you join, <b>resend your link</b> ❤️
+
+help:
+  text: |
+    <blockquote>🎬 <b>Yoink Bot - Help</b>
+
+    📥 <b>Basic Usage:</b>
+    • Send any link → bot downloads it
+    • <code>/audio URL</code> → extract audio only
+    • <code>/link [quality] URL</code> → get direct stream links
+    • <code>/list URL</code> → show all available formats
+
+    📋 <b>Playlists &amp; Ranges:</b>
+    • <code>URL*1*5</code> → first 5 items
+    • <code>URL*-1*-5</code> → last 5 items
+    • <code>/vid 3-7 URL</code> → items 3 to 7
+
+    🍪 <b>Cookies:</b>
+    • Upload a <code>.txt</code> cookie file for private content
+    • <code>/cookie</code> → manage cookies
+
+    ⚙️ <b>Settings:</b>
+    • <code>/format</code> → quality, codec, container
+    • <code>/subs</code> → subtitles
+    • <code>/proxy</code> → proxy toggle
+    • <code>/settings</code> → all settings
+    </blockquote>
+
+download:
+  no_url: "No URL found. Please send a link starting with <b>https://</b> or <b>http://</b>"
+  starting: "⏳ Starting download..."
+  progress: "⬇️ Downloading: {percent}%\n{speed} · {eta} left"
+  uploading: "⬆️ Uploading to Telegram..."
+  uploading_progress: "⬆️ Uploading: {percent}%\n{speed}"
+  complete: "✅ <b>Upload complete</b> - {count} file(s) uploaded."
+  complete_single: "✅ <b>Done!</b>"
+  error: "❌ Download failed: {error}"
+  timeout: "⏱ Download timed out after {seconds}s."
+  file_too_large: "❌ File is too large ({size}). Maximum allowed: {max_size}."
+  live_stream: "❌ Live streams are not supported."
+  unsupported: "❌ This URL is not supported."
+  blacklisted: "❌ This domain is not allowed."
+  already_downloading: "⏳ Already downloading something. Please wait."
+  splitting: "✂️ Splitting into {count} parts..."
+  part: "Part {n}/{total}"
+
+format:
+  current: "Current quality: <b>{quality}</b>\nCodec: <b>{codec}</b>\nContainer: <b>{container}</b>"
+  set_quality: "Quality set to <b>{quality}</b> ✅"
+  ask_mode: "Quality: <b>Always ask</b> ✅"
+  set_codec: "Codec set to <b>{codec}</b> ✅"
+  set_container: "Container set to <b>{container}</b> ✅"
+  choose_quality: "Choose video quality:"
+  choose_codec: "Choose codec:"
+  buttons:
+    best: "🏆 Best"
+    ask: "❓ Always ask"
+    codec_avc: "H.264 (AVC)"
+    codec_av1: "AV1"
+    codec_vp9: "VP9"
+    container_mp4: "MP4"
+    container_mkv: "MKV"
+
+cookie:
+  prompt: "Send me your cookie file for <b>{domain}</b> (Netscape format .txt):"
+  saved: "🍪 Cookie saved for <b>{domain}</b>"
+  invalid: "❌ Invalid cookie format. Please export in Netscape format."
+  too_large: "❌ Cookie file too large (max 100KB)."
+  checking: "🔍 Checking cookie..."
+  valid: "✅ Cookie is valid"
+  expired: "⚠️ Cookie appears to be expired or invalid"
+  deleted: "🗑 Cookie deleted for <b>{domain}</b>"
+  no_cookie: "No cookie saved for <b>{domain}</b>"
+  download_started: "⏳ Downloading cookie for <b>{domain}</b>..."
+  download_ok: "✅ Cookie downloaded and saved for <b>{domain}</b>"
+  download_error: "❌ Failed to download cookie: {error}"
+  rate_limited: "⏳ Too many cookie operations. Please wait {seconds}s."
+
+proxy:
+  enabled: "🔀 Proxy <b>enabled</b> for all downloads ✅"
+  disabled: "🔀 Proxy <b>disabled</b> ✅"
+  not_configured: "❌ No proxy configured. Ask admin."
+  menu_title: "Proxy settings:"
+
+subs:
+  enabled: "📝 Subtitles <b>enabled</b> (language: {lang}) ✅"
+  disabled: "📝 Subtitles <b>disabled</b> ✅"
+  not_available: "⚠️ No subtitles available for this video."
+  auto_enabled: "Auto-generated subtitles: <b>enabled</b> ✅"
+  auto_disabled: "Auto-generated subtitles: <b>disabled</b> ✅"
+  choose_language: "Choose subtitle language:"
+  embedded: "Subtitles embedded ✅"
+  embed_error: "⚠️ Could not embed subtitles: {error}"
+
+args:
+  title: "⚙️ <b>Custom yt-dlp arguments</b>\n\nCurrent settings:"
+  saved: "✅ Settings saved"
+  reset: "✅ Settings reset to defaults"
+  invalid_value: "❌ Invalid value for <b>{field}</b>: {error}"
+  import_ok: "✅ Settings imported"
+  import_error: "❌ Import failed: {error}"
+
+keyboard:
+  set: "⌨️ Keyboard layout set to <b>{mode}</b> ✅"
+  hidden: "⌨️ Keyboard hidden ✅"
+
+clean:
+  done: "🧹 Cleaned: {what}"
+  all_done: "🧹 All data cleaned ✅"
+  nothing: "Nothing to clean."
+
+settings:
+  title: "⚙️ <b>Your settings:</b>\n\nLanguage: {language}\nQuality: {quality}\nCodec: {codec}\nContainer: {container}\nProxy: {proxy}\nKeyboard: {keyboard}\nSubtitles: {subs}\nSplit size: {split_size}\nNSFW blur: {nsfw_blur}\nMediainfo: {mediainfo}"
+
+lang:
+  set: "✅ Language set to <b>{lang}</b>"
+  choose: "🌍 Choose language:"
+  buttons:
+    en: "🇺🇸 English"
+    ru: "🇷🇺 Русский"
+    ar: "🇸🇦 العربية"
+    hi: "🇮🇳 हिन्दी"
+    zh: "🇨🇳 中文"
+    ja: "🇯🇵 日本語"
+
+split:
+  set: "✂️ Split size set to <b>{size}</b> ✅"
+  choose: "Choose split size:"
+  buttons:
+    500mb: "500 MB"
+    1gb: "1 GB"
+    1_5gb: "1.5 GB"
+    2gb: "2 GB (default)"
+    custom: "Custom..."
+
+nsfw:
+  blur_on: "🔞 NSFW content will be <b>blurred</b> (spoiler) ✅"
+  blur_off: "🔞 NSFW blur <b>disabled</b> ✅"
+  paid_required: "🔞 NSFW content requires {cost}⭐ Stars"
+
+mediainfo:
+  enabled: "ℹ️ MediaInfo reports <b>enabled</b> ✅"
+  disabled: "ℹ️ MediaInfo reports <b>disabled</b> ✅"
+
+tags:
+  cleared: "🏷 Tags cleared ✅"
+
+link:
+  title: "🔗 <b>Direct links for:</b>\n{title}"
+  no_url: "⚠️ Could not get direct link: {error}"
+  browser: "🌐 Browser"
+  vlc_ios: "🎬 VLC (iOS)"
+  vlc_android: "🎬 VLC (Android)"
+  mpv: "▶️ MPV"
+  quality_set: "Quality: <b>{quality}</b>"
+
+list_formats:
+  title: "📋 <b>Available formats for:</b>\n{title}"
+  empty: "No formats found for this URL."
+  hint: "Use <code>/format id {id}</code> to download a specific format."
+  file_caption: "📋 Full format list"
+
+search:
+  prompt: "🔍 Enter search query:"
+  results_title: "🔍 <b>Search results for:</b> {query}"
+  no_results: "No results found for: {query}"
+  choose: "Choose a result to download:"
+
+vid:
+  help: |
+    <b>/vid</b> - download with range support
+
+    <b>Usage:</b>
+    <code>/vid URL</code> - single video
+    <code>/vid 1-5 URL</code> - items 1 to 5
+    <code>/vid -1-5 URL</code> - last 5 items (1 to 5 from end)
+
+always_ask:
+  choose_quality: "🎬 <b>{title}</b>\n\nChoose quality:"
+  choose_action: "What would you like to download?"
+  processing: "⏳ Processing your choice..."
+  buttons:
+    audio: "🎵 Audio only"
+    link: "🔗 Direct link"
+    subs: "📝 Subtitles"
+    image: "🖼 Images"
+    cancel: "❌ Cancel"
+
+image:
+  starting: "🖼 Downloading images..."
+  progress: "🖼 Downloaded {n}/{total} images"
+  complete: "✅ {count} image(s) uploaded"
+  error: "❌ Image download failed: {error}"
+  no_images: "No images found at this URL."
+  album_caption: "{count} images"
+  range_hint: "Use <code>/img 1-10 URL</code> to download a specific range"
+
+usage:
+  title: "📊 <b>Your usage statistics</b>"
+  downloads: "Downloads: <b>{count}</b>"
+  total_size: "Total size: <b>{size}</b>"
+  today: "Today: <b>{count}</b>"
+  period: "Last {days} days: <b>{count}</b>"
+
+admin:
+  access_denied: "❌ Admin only."
+  user_not_found: "User {user_id} not found."
+  user_blocked: "✅ User {user_id} blocked."
+  user_unblocked: "✅ User {user_id} unblocked."
+  ban_set: "✅ User {user_id} banned for {duration}."
+  broadcast_started: "📢 Broadcasting to {count} users..."
+  broadcast_done: "✅ Broadcast complete: {sent} sent, {failed} failed."
+  cache_reloaded: "✅ Cache reloaded."
+  cache_error: "❌ Cache reload failed: {error}"
+  runtime: "⏱ Bot uptime: <b>{uptime}</b>"
+  logs_title: "📋 Logs for user {user_id}:"
+  no_logs: "No logs for user {user_id}."
+
+errors:
+  download_failed: "❌ Download failed: {error}"
+  upload_failed: "❌ Upload failed: {error}"
+  cookie_required: "🍪 This content requires authentication. Use /cookie to set up cookies."
+  geo_blocked: "🌍 This content is not available in your region. Try enabling /proxy."
+  private_content: "🔒 This content is private. Upload cookies with /cookie."
+  rate_limited: "⏳ Rate limit reached. Please wait."
+  disk_full: "❌ Not enough disk space."
+  unknown: "❌ An unexpected error occurred. Please try again."

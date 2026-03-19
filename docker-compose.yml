@@ -1,0 +1,179 @@
+services:
+  yoink-postgres:
+    image: postgres:17-alpine
+    container_name: yoink-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: "${POSTGRES_USER:-yoink}"
+      POSTGRES_PASSWORD: "${POSTGRES_PASSWORD}"
+      POSTGRES_DB: "${POSTGRES_DB:-yoink}"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - yoink
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-yoink}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  yoink-bot:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.app
+    image: yoink/bot:latest
+    container_name: yoink-bot
+    env_file: .env
+    restart: unless-stopped
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - yoink
+    depends_on:
+      yoink-postgres:
+        condition: service_healthy
+      telegram-bot-api:
+        condition: service_healthy
+        restart: true
+      bgutil-provider:
+        condition: service_started
+    volumes:
+      - ./data:/app/data
+      - ./data/kasm/profile/chromium:/app/data/browser-profile:ro
+    healthcheck:
+      test: ["CMD-SHELL", "kill -0 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+    logging:
+      driver: local
+      options:
+        max-size: "500M"
+        max-file: "3"
+
+  telegram-bot-api:
+    image: aiogram/telegram-bot-api:latest
+    container_name: tg-bot-api
+    restart: unless-stopped
+    environment:
+      TELEGRAM_API_ID: "${API_ID}"
+      TELEGRAM_API_HASH: "${API_HASH}"
+      TELEGRAM_LOCAL: "true"
+    network_mode: "container:wireguard"
+    volumes:
+      - ./data/bot-api:/var/lib/telegram-bot-api
+    healthcheck:
+      test: ["CMD-SHELL", "wget -S -Y off http://127.0.0.1:8081/ 2>&1 | grep -q 'HTTP/'"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 20s
+    logging:
+      driver: local
+      options:
+        max-size: "50M"
+        max-file: "3"
+
+  bgutil-provider:
+    image: brainicism/bgutil-ytdlp-pot-provider:latest
+    container_name: bgutil-provider
+    restart: unless-stopped
+    environment:
+      PROXY: "socks5://host.docker.internal:1080"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - yoink
+    healthcheck:
+      test: ["CMD-SHELL", "node -e \"require('http').get('http://127.0.0.1:4416/',r=>process.exit(r.statusCode<500?0:1)).on('error',()=>process.exit(1))\""]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+    logging:
+      driver: local
+      options:
+        max-size: "50M"
+        max-file: "3"
+
+  kasm-chromium:
+    image: kasmweb/chromium:1.18.0-rolling-daily
+    container_name: kasm-chromium
+    profiles:
+      - cookies
+    environment:
+      VNC_PW: "${KASM_VNC_PW}"
+      LAUNCH_URL: "https://www.youtube.com"
+      KASM_RESTRICTED_FILE_CHOOSER: "0"
+      VNCOPTIONS: "-disableBasicAuth -PreferBandwidth -DynamicQualityMin=4 -DynamicQualityMax=7 -DLP_ClipDelay=0"
+    ports:
+      - "6901:6901"
+    shm_size: 1gb
+    volumes:
+      - ./data/cookies:/home/kasm-user/cookies
+      - ./data/kasm/profile:/home/kasm-user/.config
+    restart: no
+    networks:
+      - yoink
+
+
+  yoink-api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.app
+    image: yoink/api:latest
+    container_name: yoink-api
+    command: ["uv", "run", "yoink-api"]
+    restart: unless-stopped
+    user: "1000:1000"
+    env_file: .env
+    environment:
+      DATABASE_URL: "postgresql+asyncpg://${POSTGRES_USER:-yoink}:${POSTGRES_PASSWORD}@yoink-postgres:5432/${POSTGRES_DB:-yoink}"
+      UV_CACHE_DIR: "/tmp/uv-cache"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - ./src/db:/app/src/db
+    depends_on:
+      yoink-postgres:
+        condition: service_healthy
+    networks:
+      - yoink
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://127.0.0.1:8000/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
+
+
+  yoink-frontend:
+    build:
+      context: ./src/web
+      dockerfile: ../../docker/Dockerfile.frontend
+    image: yoink/frontend:latest
+    container_name: yoink-frontend
+    restart: unless-stopped
+    networks:
+      - yoink
+    ports:
+      - "3010:80"
+    depends_on:
+      yoink-api:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://127.0.0.1:80/ >/dev/null || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+
+volumes:
+  postgres-data:
+
+networks:
+  yoink:
+    driver: bridge
